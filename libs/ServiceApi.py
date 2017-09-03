@@ -20,7 +20,13 @@ class ServiceApi():
         else:
             return False
 
+    def query_data(self, params):
+        query_data = requests.get(self.service_api_url, params=params)
+        #print(query_data.text)
+        return query_data.json()
+
     def query_id(self, params):
         query_data = requests.get(self.service_api_url, params=params)
+        #print(query_data.text)
         repo_id = eval(query_data.text)["data"]["id"]
         return repo_id
