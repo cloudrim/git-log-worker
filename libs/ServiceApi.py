@@ -15,6 +15,7 @@ class ServiceApi():
 
     def check_data_exist(self, params):
         query_data = requests.get(self.service_api_url, params=params)
+        #print query_data.text
         if eval(query_data.text)["data"]:
             return True
         else:
@@ -22,7 +23,7 @@ class ServiceApi():
 
     def query_data(self, params):
         query_data = requests.get(self.service_api_url, params=params)
-        #print(query_data.text)
+        print query_data.json()
         return query_data.json()
 
     def query_id(self, params):

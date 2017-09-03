@@ -15,14 +15,13 @@ class GitLog():
         print os.popen("git clone " + self.giturl + " tmp").readlines()
 
     def git_log(self):
-        log_stream = os.popen('git log --no-merges --pretty=format:%H,%an,%ae,%at,%cn,%ce,%ct,%s','r')
-        key = ["revision","author","author_email", "author_date", "committer", "committer_email", "committer_date", "title"]
+        log_stream = os.popen('git log --no-merges --pretty=format:%H,%an,%ae,%at,%cn,%ce,%ct','r')
+        key = ["revision","author","author_email", "author_date", "committer", "committer_email", "committer_date"]
         git_log_data = []
         for item in log_stream.readlines():
             revision_data = item.split(",")
             revision_data[3] = datetime.utcfromtimestamp(int(revision_data[3])).strftime('%Y%m%d%H%M%S')
             revision_data[6] = datetime.utcfromtimestamp(int(revision_data[6])).strftime('%Y%m%d%H%M%S')
-            revision_data[7] = revision_data[7].strip()
             insert_data = dict(zip(key, revision_data))
             git_log_data.append(insert_data)
         return git_log_data
