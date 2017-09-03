@@ -11,7 +11,7 @@ class ServiceApi():
 
     def post_data(self, body):
         response = requests.post(self.service_api_url, data=body)
-        return response.text
+        return response.json()
 
     def check_data_exist(self, params):
         query_data = requests.get(self.service_api_url, params=params)

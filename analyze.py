@@ -11,7 +11,7 @@ if __name__ == "__main__":
     user = ""
     passwd = ""
     path = ""
-    repo = GitLog(giturl=giturl,branch=branch,path=path)
+    repo = GitLog(giturl=giturl, branch=branch, path=path)
     #utils.remove_tmp()
     #repo.git_clone()
     datetime = datetime.now()
@@ -35,15 +35,15 @@ if __name__ == "__main__":
     else:
         result = service.post_data(body)
         #print(result)
-        repo_id = int(eval(result)["data"]["id"])
+        repo_id = int(result["data"]["id"])
     #print(repo_id)
     # insert commit table
     for commit in repo.git_log():
         commit["last_update"] = datetime.strftime('%Y%m%d%H%M%S')
         #print(commit)
         commit_api = ServiceApi("http://localhost:5000/repo/" + str(repo_id) + "/commit")
-        response_status = eval(commit_api.post_data(json.dumps(commit)))["status"]
-        response_message = eval(commit_api.post_data(json.dumps(commit)))["message"]
+        response_status = commit_api.post_data(json.dumps(commit))["status"]
+        response_message = commit_api.post_data(json.dumps(commit))["message"]
         commit_revision = commit["revision"]
         #print(repo.git_show(commit_revision))
         params = {"revision": commit_revision}
@@ -80,7 +80,8 @@ if __name__ == "__main__":
                 "del_lines": del_line
             }
             query_commit_diff_data = commit_diff_api.query_data(commit_diff_get_params)
-            if query_commit_diff_data:
-                print("exists data: " + str(query_commit_diff_data))
+            if query_commit_diff_data["data"]:
+                print("exists data: " + str(commit_diff_get_params))
             else:
-                print commit_diff_api.post_data(commit_diff_post_body)
+                commit_diff_api.post_data(commit_diff_post_body)
+                print("insert data: " + str(commit_diff_post_body))
