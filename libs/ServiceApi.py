@@ -23,7 +23,7 @@ class ServiceApi():
 
     def query_data(self, params):
         query_data = requests.get(self.service_api_url, params=params)
-        print query_data.json()
+        print(query_data.json())
         return query_data.json()
 
     def query_id(self, params):

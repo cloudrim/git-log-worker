@@ -2,12 +2,12 @@
 import json
 import os
 from datetime import datetime
-
+from libs import utils
 from libs.GitLog import GitLog
 from libs.ServiceApi import ServiceApi
 
 if __name__ == "__main__":
-    giturl = "https://github.com/ansible-semaphore/semaphore.git" #use http instead of git
+    giturl = "https://github.com/modoojunko/git-log-service.git" #use http instead of git
     branch = "master"
     service_ip = "localhost"
     service_port = 5000
@@ -15,8 +15,8 @@ if __name__ == "__main__":
     passwd = ""
     path = ""
     repo = GitLog(giturl=giturl, branch=branch, path=path)
-    #utils.remove_tmp()
-    #repo.git_clone()
+    utils.remove_tmp()
+    repo.git_clone()
     datetime = datetime.now()
     body = json.dumps({
             "domain": giturl.split("/")[2],
@@ -43,7 +43,7 @@ if __name__ == "__main__":
     # insert commit table
     for commit in repo.git_log():
         commit["last_update"] = datetime.strftime('%Y%m%d%H%M%S')
-        print "add commit data :" + str(commit)
+        print("add commit data :" + str(commit))
         commit_api = ServiceApi("http://" + service_ip + ":" + str(service_port) + "/repo/" + str(repo_id) + "/commit")
         commit_api.post_data(json.dumps(commit))
         commit_revision = commit["revision"]
